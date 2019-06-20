@@ -1,0 +1,3 @@
+module Aurora
+  # Your code goes here...
+end
