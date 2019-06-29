@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name        = "aurora"
   s.version     = Aurora::VERSION
   s.authors     = ["Kashiwara"]
-  s.email       = ["tanakatarou0205@yahoo.co.jp"]
+  s.email       = ["aurora0205k@gmail.com"]
   s.summary     = "This gem is seeder which is very usefull"
   s.description = "Please look posted information on github"
   s.license     = "MIT"
@@ -17,4 +17,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 5.0.0"
   s.add_dependency 'activerecord-import', '>= 1.00'
+  s.add_dependency 'tomlrb', '>= 1.00'
 end
