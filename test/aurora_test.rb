@@ -49,12 +49,21 @@ class Aurora::Test < ActiveSupport::TestCase
   # outline: whether autora can register with the setting array 
   # expected value: registerd 3 datas
   #                 registerd ["北海道", "青森県", "岩手県"]
-  test "insert array" do
+  test "insert setting array" do
     Aurora.execute("test/data/function/array_insert.toml")
     assert_equal 3, Pref.all.count
     assert_equal true, Pref.where(name: "北海道").present?
     assert_equal true, Pref.where(name: "青森県").present?
     assert_equal true, Pref.where(name: "岩手県").present?
+  end
+
+  # outline: whether autora can register with the setting string
+  # expected value: registerd 3 datas
+  #                 registerd "北海道"
+  test "insert setting string" do
+    Aurora.execute("test/data/function/string_insert.toml")
+    assert_equal 3, Pref.all.count
+    assert_equal 3, Pref.where(name: "北海道").count
   end
 
   # outline: whether 'add_id' works

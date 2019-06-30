@@ -1,4 +1,5 @@
 require "seeder/seeder.rb"
+require "expression_parser/expression_parser.rb"
 
 class DataStructure
   class << self
@@ -8,9 +9,9 @@ class DataStructure
         acc[str_model] = r.second
         # set col data which was taked from db
         set_col(acc[str_model], get_col(str_model))
-        # set expand '< >'
+        # set expand '< >' and ':'
         set_expand_expression(acc[str_model])
-        # set seed data 
+        # set original seed data 
         set_seed(acc[str_model])
 
         acc
@@ -28,6 +29,7 @@ class DataStructure
 
     def set_col config_data, col
       col.each do |key, val|
+
         config_data.each do |e|
           e[:col] ||= Hash.new
           # config_data has not its column data
@@ -39,27 +41,37 @@ class DataStructure
             e[:type][key.to_sym] = val[:type]
           end
         end
+
       end
     end
 
     def set_expand_expression config_data
-      # Unimplemented
+      config_data.each do |e|
+
+        e[:col].each do |key, val|
+          # if there is no data, skip
+          next if e[:col][key.to_sym].nil?
+          e[:col][key.to_sym] = ExpressionParser.parse(val)
+        end
+
+      end
     end
 
     def set_seed config_data
-      # id does't gen seed data 
+      # id does't generate seed data 
       block = ->(str){ [:id].include?(str) }
       config_data.each do |e|
-        next if e[:type].nil?
-        e[:type].each do |key, val| 
-
+  
+        e[:type].each do |key, _|
+          # if there is data already, skip
+          next if e[:col][key.to_sym].present?
           if block.call(key)
             e[:col][key.to_sym] = nil
           else
             e[:col][key.to_sym] = Seeder.gen(e[:loop], e[:type][key.to_sym]) 
           end
-
         end
+
       end
     end
   end
