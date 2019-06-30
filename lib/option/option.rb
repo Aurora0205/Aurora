@@ -18,7 +18,7 @@ class Option
 
     def separate option
       # separate option to 'select' and 'add'
-      # {s elect = >[], add => [] }
+      # { select = >[], add => [] }
       select_filter = ->(name){ ["rotate", "random"].include?(name) }
       add_filter = ->(name){ ["add_id"].include?(name) }
 

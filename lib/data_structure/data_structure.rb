@@ -1,5 +1,4 @@
 require "seeder/seeder.rb"
-require "expression_parser/expression_parser.rb"
 
 class DataStructure
   class << self
@@ -9,8 +8,6 @@ class DataStructure
         acc[str_model] = r.second
         # set col data which was taked from db
         set_col(acc[str_model], get_col(str_model))
-        # set expand '< >' and ':'
-        set_expand_expression(acc[str_model])
         # set original seed data 
         set_seed(acc[str_model])
 
@@ -40,18 +37,6 @@ class DataStructure
             e[:type] ||= Hash.new
             e[:type][key.to_sym] = val[:type]
           end
-        end
-
-      end
-    end
-
-    def set_expand_expression config_data
-      config_data.each do |e|
-
-        e[:col].each do |key, val|
-          # if there is no data, skip
-          next if e[:col][key.to_sym].nil?
-          e[:col][key.to_sym] = ExpressionParser.parse(val)
         end
 
       end

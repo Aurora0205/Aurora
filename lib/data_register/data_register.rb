@@ -1,5 +1,6 @@
 require "option/option.rb"
 require "activerecord-import"
+require "expression_parser/expression_parser.rb"
 
 class DataRegister
   class << self
@@ -22,6 +23,8 @@ class DataRegister
       end
     end
 
+    private
+
     def get_seed_arr model, config_data
       options = config_data[:option]
       loop_size = config_data[:loop]
@@ -29,6 +32,9 @@ class DataRegister
       if apply_autoincrement?(config_data[:autoincrement])
         set_autoincrement(config_data, model, loop_size)
       end
+      
+      # set expand expression '<>' and ':' and so on...
+      set_expand_expression(config_data)
 
       config_data[:col].map do |key, val| 
         option_conf = options.nil? ? nil : Option.gen(options[key])
@@ -49,6 +55,14 @@ class DataRegister
       additions = model.all.count + loop_size
       latest_id = last_record.nil? ? 1 : last_record.id + 1
       config_data[:col][:id] = [*latest_id..additions]
+    end
+
+    def set_expand_expression config_data
+      config_data[:col].each do |key, val|
+        # if it exists type, there is no need for doing 'expand expression'
+        next if config_data[:type][key.to_sym].present?
+        config_data[:col][key.to_sym] = ExpressionParser.parse(val)
+      end
     end
 
     def get_seed arr, cnt

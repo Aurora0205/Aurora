@@ -11,7 +11,7 @@ class Aurora::Test < ActiveSupport::TestCase
     Aurora.execute("test/data/function/nothing_conf.toml")
     assert_equal 3, Pref.all.count
   end
-
+  
   # outline: whether autora can register with the same model
   # expected value: registerd 6 datas
   test "same model" do
@@ -75,5 +75,14 @@ class Aurora::Test < ActiveSupport::TestCase
     assert_equal true, Pref.where(name: "北海道_0").present?
     assert_equal true, Pref.where(name: "青森県_1").present?
     assert_equal true, Pref.where(name: "岩手県_2").present?
+  end
+
+  # outline: whether autora can register with the foreign key
+  # expected value: registerd 6 datas(pref: 3, member: 3)
+  test "foreign_key" do
+    Aurora.execute("test/data/function/foreign_key_insert.toml")
+    assert_equal 3, Pref.all.count
+    assert_equal 3, Member.all.count
+    assert_equal Pref.all.pluck(:id), Member.all.pluck(:pref_id)
   end
 end
