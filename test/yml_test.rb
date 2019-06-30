@@ -86,4 +86,17 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal 3, Member.all.count
     assert_equal Pref.all.pluck(:id), Member.all.pluck(:pref_id)
   end
+
+  # outline: whether autora can register with the expression_expansion
+  # expected value: registerd 3 datas
+  #                 created_at: DateTime.parse("1997/02/05")
+  test "expression_expansion" do
+    Aurora.execute("test/data/yml/function/expression_expansion.yml")
+    assert_equal 3, Pref.all.count
+    assert_equal true, Pref.where(name: "北海道").present?
+    assert_equal true, Pref.where(name: "青森県").present?
+    assert_equal true, Pref.where(name: "岩手県").present?
+    assert_equal 3, Pref.where(created_at: DateTime.parse("1997/02/05")).count
+  end
+
 end
