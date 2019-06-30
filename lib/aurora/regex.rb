@@ -9,3 +9,9 @@ def is_expression? val
   return false unless val.kind_of?(String)
   EXPRESSION =~ val 
 end
+
+ENUM = /^enum(\s*.)*$/
+def is_enum? val
+  return false unless val.kind_of?(String)
+  ENUM =~ val 
+end

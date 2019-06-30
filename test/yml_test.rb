@@ -99,4 +99,10 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal 3, Pref.where(created_at: DateTime.parse("1997/02/05")).count
   end
 
+  # outline:  whether 'default seeder function' works
+  # expected value: registerd 3 datas
+  test "default seeder" do
+    Aurora.execute("test/data/yml/function/default_seeder.yml")
+    assert_equal 3, TestModel.all.count
+  end
 end
