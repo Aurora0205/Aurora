@@ -1,7 +1,3 @@
-require "option/option.rb"
-require "activerecord-import"
-require "expression_parser/expression_parser.rb"
-
 class DataRegister
   class << self
     def regist config_data
@@ -24,7 +20,7 @@ class DataRegister
     end
 
     private
-
+    
     def get_seed_arr model, config_data
       options = config_data[:option]
       loop_size = config_data[:loop]

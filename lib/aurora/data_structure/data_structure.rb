@@ -1,5 +1,3 @@
-require "seeder/seeder.rb"
-
 class DataStructure
   class << self
     def gen data
@@ -16,6 +14,7 @@ class DataStructure
     end
 
     private
+
     def get_col str_model
       model = eval(str_model)
       model.columns.reduce(Hash.new) do |acc, col| 
