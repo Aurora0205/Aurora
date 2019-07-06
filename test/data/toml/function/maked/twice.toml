@@ -1,0 +1,13 @@
+[[Pref]]
+  loop = 2
+  [Pref.col]
+    name = ["北海道", "青森県"]
+[[Pref]]
+  loop = 2
+  [Pref.col]
+    name = ["秋田県", "茨城県"]
+[[Member]]
+  loop = 4
+  [Member.col]
+    name = "<maked[:Pref][:name]>"
+    pref_id = "$Pref"

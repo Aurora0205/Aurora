@@ -5,4 +5,4 @@
 - Member:
   - loop: 3
     col:
-      pref_id: F:Pref
+      pref_id: $Pref

@@ -99,10 +99,30 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal 3, Pref.where(created_at: DateTime.parse("1997/02/05")).count
   end
 
-  # outline:  whether 'default seeder function' works
+  # outline: whether 'default seeder function' works
   # expected value: registerd 3 datas
   test "default seeder" do
     Aurora.execute("test/data/yml/function/default_seeder.yml")
     assert_equal 3, TestModel.all.count
+  end
+
+  # outline: whether 'maked function' works
+  # expected value: registerd 3 datas
+  test "maked" do
+    Aurora.execute("test/data/yml/function/maked/once.yml")
+    assert_equal 2, Member.all.count
+    assert_equal true, Member.where(name: "北海道").present?
+    assert_equal true, Member.where(name: "青森県").present?
+  end
+
+  # outline: whether 'maked function' works when written twice in a row
+  # expected value: registerd 3 datas
+  test "maked(twice)" do
+    Aurora.execute("test/data/yml/function/maked/twice.yml")
+    assert_equal 4, Member.all.count
+    assert_equal true, Member.where(name: "北海道").present?
+    assert_equal true, Member.where(name: "青森県").present?
+    assert_equal true, Member.where(name: "秋田県").present?
+    assert_equal true, Member.where(name: "茨城県").present?
   end
 end

@@ -104,4 +104,24 @@ class Aurora::TomlTest < ActiveSupport::TestCase
     Aurora.execute("test/data/toml/function/default_seeder.toml")
     assert_equal 3, TestModel.all.count
   end
+
+  # outline: whether 'maked function' works
+  # expected value: registerd 3 datas
+  test "maked" do
+    Aurora.execute("test/data/toml/function/maked/once.toml")
+    assert_equal 2, Member.all.count
+    assert_equal true, Member.where(name: "北海道").present?
+    assert_equal true, Member.where(name: "青森県").present?
+  end
+
+  # outline: whether 'maked function' works when written twice in a row
+  # expected value: registerd 3 datas
+  test "maked(twice)" do
+    Aurora.execute("test/data/toml/function/maked/twice.toml")
+    assert_equal 4, Member.all.count
+    assert_equal true, Member.where(name: "北海道").present?
+    assert_equal true, Member.where(name: "青森県").present?
+    assert_equal true, Member.where(name: "秋田県").present?
+    assert_equal true, Member.where(name: "茨城県").present?
+  end
 end

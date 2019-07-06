@@ -6,4 +6,4 @@
 [[Member]]
   loop = 3
   [Member.col]
-    pref_id = "F:Pref"
+    pref_id = "$Pref"

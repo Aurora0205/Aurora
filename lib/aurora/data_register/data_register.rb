@@ -1,27 +1,28 @@
 class DataRegister
   class << self
     def regist config_data
+      # init maked data
+      maked ||= Hash.new
       config_data.each do |key, val|
-        str_model = key.to_s
-        model = eval(str_model)
+        model = eval(key)
+        # col_arr: [:col1, :col2, :col3]
         col_arr = val.first[:col].keys
 
         val.each do |e|
           output_log(e[:log]) 
-          seed_arr = get_seed_arr(model, e)
-          # about data structure
-          # col_arr: [:col1, :col2, :col3]
           # seed_arr: [[col1_element, col1_element], [col2_element, col2_element]...]
-          # transpose => seed_arr: [[col1_element, col2_element], [col1_element, col2_element]...]
+          seed_arr = get_seed_arr(model, e, maked)
+          # seed_arr.transpose: [[col1_element, col2_element], [col1_element, col2_element]...]
           model.import(col_arr, seed_arr.transpose, validate: false, timestamps: false)
-        end
 
+          update_maked_data(maked, key.to_sym, col_arr, seed_arr)
+        end
       end
     end
 
     private
     
-    def get_seed_arr model, config_data
+    def get_seed_arr model, config_data, maked
       options = config_data[:option]
       loop_size = config_data[:loop]
 
@@ -30,7 +31,7 @@ class DataRegister
       end
       
       # set expand expression '<>' and ':' and so on...
-      set_expand_expression(config_data)
+      set_expand_expression(config_data, maked)
 
       config_data[:col].map do |key, val| 
         option_conf = options.nil? ? nil : Option.gen(options[key])
@@ -53,11 +54,11 @@ class DataRegister
       config_data[:col][:id] = [*latest_id..additions]
     end
 
-    def set_expand_expression config_data
+    def set_expand_expression config_data, maked
       config_data[:col].each do |key, val|
         # if it exists type, there is no need for doing 'expand expression'
         next if config_data[:type][key.to_sym].present?
-        config_data[:col][key.to_sym] = ExpressionParser.parse(val)
+        config_data[:col][key.to_sym] = ExpressionParser.parse(val, maked)
       end
     end
 
@@ -67,6 +68,20 @@ class DataRegister
 
     def get_seed_with_option arr, option, cnt
       Option.apply(arr, option, cnt)
+    end
+
+    def update_maked_data maked, sym_model, col_arr, seed_arr
+      # maked: { key: Model, value: {key: col1, val: [col1_element, col1_element]} }
+      if maked.has_key?(sym_model)
+        # merge hash data
+        maked[sym_model].merge!([col_arr, seed_arr].transpose.to_h)do |_, oldval, newval|
+          oldval + newval
+        end
+      else
+        maked[sym_model] = [col_arr, seed_arr].transpose.to_h
+      end
+
+      maked
     end
 
     def output_log log

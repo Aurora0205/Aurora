@@ -1,0 +1,12 @@
+- Pref: 
+  - loop: 2
+    col:
+      name: ["北海道", "青森県"]
+  - loop: 2
+    col:
+      name: ["秋田県", "茨城県"]
+- Member:
+  - loop: 4
+    col:
+      name: <maked[:Pref][:name]>
+      pref_id: $Pref
