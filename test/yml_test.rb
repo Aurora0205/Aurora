@@ -125,4 +125,11 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal true, Member.where(name: "秋田県").present?
     assert_equal true, Member.where(name: "茨城県").present?
   end
+
+  # outline: whether 'expression_expansion' of loop works
+  # expected value: registerd 3 datas
+  test "expression_expansion of loop" do
+    Aurora.execute("test/data/yml/function/loop_expression_expansion.yml")
+    assert_equal 3, Pref.all.count
+  end
 end

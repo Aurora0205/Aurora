@@ -5,9 +5,7 @@ class DataStructure
         str_model = r.first.to_s
         acc[str_model] = r.second
         # set col type info which was taked from db
-        prepare_seed(acc[str_model], get_col_type(str_model))
-        # if there is no setting data, set default seed data 
-        set_default_seed(acc[str_model])
+        set_col_type(acc[str_model], get_col_type(str_model))
 
         acc
       end
@@ -24,7 +22,7 @@ class DataStructure
       end
     end
 
-    def prepare_seed config_data, col
+    def set_col_type config_data, col
       col.each do |key, val|
 
         config_data.each do |e|
@@ -49,22 +47,5 @@ class DataStructure
       end
     end
 
-    def set_default_seed config_data
-      # id does't generate seed data 
-      block = ->(str){ [:id].include?(str) }
-      config_data.each do |e|
-  
-        e[:type].each do |key, _|
-          # if there is data already, skip
-          next if e[:col][key.to_sym].present?
-          # if it is id, skip
-          next if block.call(key)
-
-          e[:col][key.to_sym] = 
-            Seeder.gen(e[:loop], e[:type][key.to_sym], e[:sql_type][key.to_sym]) 
-        end
-
-      end
-    end
   end
 end

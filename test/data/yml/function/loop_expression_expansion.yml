@@ -1,0 +1,8 @@
+- Pref: 
+  - loop: 3
+    col:
+      name: ["北海道", "青森県", "岩手県"]
+- Member:
+  - loop: $Pref
+    col:
+      pref_id: $Pref

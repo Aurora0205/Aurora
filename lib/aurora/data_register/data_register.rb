@@ -7,9 +7,14 @@ class DataRegister
         model = eval(key)
         # col_arr: [:col1, :col2, :col3]
         col_arr = val.first[:col].keys
-
+        
+        # each model 
         val.each do |e|
           output_log(e[:log]) 
+          # set expand expression for loop '<>' and ':' and so on...
+          set_loop_expand_expression(e, maked)
+          # if there is no setting data, set default seed data
+          set_default_seed(e)
           # seed_arr: [[col1_element, col1_element], [col2_element, col2_element]...]
           seed_arr = get_seed_arr(model, e, maked)
           # seed_arr.transpose: [[col1_element, col2_element], [col1_element, col2_element]...]
@@ -21,17 +26,32 @@ class DataRegister
     end
 
     private
+
+    def set_default_seed config_data
+      block = ->(str){ [:id].include?(str) }
+      config_data[:type].each do |key, _|
+        # if there is data already, skip
+        next if config_data[:col][key.to_sym].present?
+        # if it is id, skip
+        next if block.call(key)
+
+        config_data[:col][key.to_sym] = 
+          Seeder.gen(config_data[:loop], 
+                     config_data[:type][key.to_sym], 
+                     config_data[:sql_type][key.to_sym]) 
+      end
+    end
     
     def get_seed_arr model, config_data, maked
+      # set expand expression '<>' and ':' and so on...
+      set_expand_expression(config_data, maked)
+
       options = config_data[:option]
       loop_size = config_data[:loop]
 
       if apply_autoincrement?(config_data[:autoincrement])
         set_autoincrement(config_data, model, loop_size)
       end
-      
-      # set expand expression '<>' and ':' and so on...
-      set_expand_expression(config_data, maked)
 
       config_data[:col].map do |key, val| 
         option_conf = options.nil? ? nil : Option.gen(options[key])
@@ -60,6 +80,11 @@ class DataRegister
         next if config_data[:type][key.to_sym].present?
         config_data[:col][key.to_sym] = ExpressionParser.parse(val, maked)
       end
+    end
+
+    def set_loop_expand_expression config_data, maked
+      config_data[:loop] = 
+        LoopExpressionParser.parse(config_data[:loop], maked)  
     end
 
     def get_seed arr, cnt

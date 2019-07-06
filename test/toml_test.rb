@@ -4,7 +4,6 @@ class Aurora::TomlTest < ActiveSupport::TestCase
   test "truth" do
     assert_kind_of Module, Aurora
   end
-
   # outline: whether autora can register with the minimum settings
   # expected value: registerd 3 datas
   test "nothing" do
@@ -123,5 +122,12 @@ class Aurora::TomlTest < ActiveSupport::TestCase
     assert_equal true, Member.where(name: "青森県").present?
     assert_equal true, Member.where(name: "秋田県").present?
     assert_equal true, Member.where(name: "茨城県").present?
+  end
+
+  # outline: whether 'expression_expansion' of loop works
+  # expected value: registerd 3 datas
+  test "expression_expansion of loop" do
+    Aurora.execute("test/data/toml/function/loop_expression_expansion.toml")
+    assert_equal 3, Pref.all.count
   end
 end
