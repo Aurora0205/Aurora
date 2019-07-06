@@ -1,7 +1,7 @@
 # for seed data
 class ExpressionParser
   class << self
-    FOREIGN_KEY_SYMBOL = "$"
+    FOREIGN_KEY_SYMBOL = "F|"
     def parse config_val, maked
       case 
       when config_val.instance_of?(Array)
@@ -9,7 +9,7 @@ class ExpressionParser
       when config_val.nil?
         return nil
       when is_foreign_key?(config_val)
-        # remove '$'
+        # remove 'F|'
         str_model = config_val.sub(FOREIGN_KEY_SYMBOL, "")
         model = eval(str_model)
         return model.pluck(:id)
@@ -18,7 +18,12 @@ class ExpressionParser
         expression = config_val.strip[1..-2]
         return self.parse(eval(expression), maked)
       else 
-        return [config_val]
+        if config_val.instance_of?(String)
+          # escape \\
+          [config_val.gsub("\\","")]
+        else
+          [config_val]
+        end
       end
     end
   end
@@ -27,7 +32,7 @@ end
 # for loop data
 class LoopExpressionParser
   class << self
-    FOREIGN_KEY_SYMBOL = "$"
+    FOREIGN_KEY_SYMBOL = "F|"
     def parse config_val, maked
       case 
       when config_val.instance_of?(Array)
@@ -37,7 +42,7 @@ class LoopExpressionParser
       when config_val.nil?
         return 1
       when is_foreign_key?(config_val)
-        # remove '$'
+        # remove 'F|'
         str_model = config_val.sub(FOREIGN_KEY_SYMBOL, "")
         model = eval(str_model)
         return model.pluck(:id).size

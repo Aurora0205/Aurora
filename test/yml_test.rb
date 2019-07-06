@@ -116,7 +116,7 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   end
 
   # outline: whether 'maked function' works when written twice in a row
-  # expected value: registerd 3 datas
+  # expected value: registerd 4 datas
   test "maked(twice)" do
     Aurora.execute("test/data/yml/function/maked/twice.yml")
     assert_equal 4, Member.all.count
@@ -130,6 +130,15 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # expected value: registerd 3 datas
   test "expression_expansion of loop" do
     Aurora.execute("test/data/yml/function/loop_expression_expansion.yml")
+    assert_equal 3, Member.all.count
+  end
+
+  # outline: whether 'escape function' of loop works
+  # expected value: registerd escaped str data
+  test "escape" do
+    Aurora.execute("test/data/yml/function/escape.yml")
     assert_equal 3, Pref.all.count
+    assert_equal 3, Pref.where(name: "<['北海道', '青森県', '岩手県']>").count
+    assert_equal 3, Member.where(name: "F|Pref").count
   end
 end

@@ -6,4 +6,4 @@
   - loop: 2
     col:
       name: <maked[:Pref][:name]>
-      pref_id: $Pref
+      pref_id: F|Pref
