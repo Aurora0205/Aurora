@@ -159,4 +159,13 @@ class Aurora::TomlTest < ActiveSupport::TestCase
     assert_equal true, Pref.where(name: "青森県").present?
     assert_equal true, Pref.where(name: "岩手県").present?
   end
+
+  # outline: whether 'optimize' works
+  # expected value: registerd escaped str data
+  test "optimize" do
+    Aurora.execute("test/data/toml/function/optimize.toml")
+    assert_equal true, Pref.where(name: "北海道").present?
+    assert_equal true, Pref.where(name: "青森県").present?
+    assert_equal true, Pref.where(name: "岩手県").present?
+  end
 end

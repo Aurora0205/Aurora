@@ -5,18 +5,20 @@ class Seeder
       return make_array(n, ->(){ rand(0.0..100.0) }) if type == "float"
       return make_array(n, ->(){ rand(0.0..1_000_000_000.0) }) if type == "decimal"
       return make_array(n, ->(){ SecureRandom.hex(300) }) if ["text", "binary"].include?(type)
-      return make_array(n, ->(){ [true, false].sample }) if type == "boolean"
+      # for tiny int
+      return make_array(n, ->(){ [1, 0].sample }) if type == "boolean"
       return make_string_array(n, sql_type) if type == "string"
       return make_datetime_array() if ["datetime", "date", "time"].include?(type)
     end
 
     private
+
     def make_array n, proc
       Array.new(n).map{ proc.call() }
     end
 
     def make_datetime_array
-      [DateTime.now]
+      [Time.now.to_s(:db)]
     end
 
     def make_string_array n, sql_type

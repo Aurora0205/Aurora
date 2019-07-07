@@ -5,6 +5,7 @@ class DataRegister
       maked ||= Hash.new
       config_data.each do |key, val|
         model = eval(key)
+        table_name = model.table_name
         # col_arr: [:col1, :col2, :col3]
         col_arr = val.first[:col].keys
         
@@ -17,8 +18,16 @@ class DataRegister
           set_default_seed(e)
           # seed_arr: [[col1_element, col1_element], [col2_element, col2_element]...]
           seed_arr = get_seed_arr(model, e, maked)
-          # seed_arr.transpose: [[col1_element, col2_element], [col1_element, col2_element]...]
-          model.import(col_arr, seed_arr.transpose, validate: false, timestamps: false)
+
+          # optimize is more faster than activerecord-import
+          # however, sql.conf setting is necessary to use
+          if e[:optimize] 
+            # seed_arr.transpose: [[col1_element, col2_element], [col1_element, col2_element]...]
+            insert_query = QueryBuilder.insert(table_name, col_arr, seed_arr.transpose)
+            ActiveRecord::Base.connection.execute(insert_query)
+          else  
+            model.import(col_arr, seed_arr.transpose, validate: false, timestamps: false)
+          end
 
           update_maked_data(maked, key.to_sym, col_arr, seed_arr)
         end

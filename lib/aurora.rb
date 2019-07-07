@@ -1,11 +1,6 @@
-require "aurora/data_register/data_register.rb"
-require "aurora/data_structure/data_structure.rb"
-require "aurora/expression_parser/expression_parser.rb"
-require "aurora/loader/loader.rb"
-require "aurora/option/option.rb"
-require "aurora/seeder/seeder.rb"
-require "aurora/regex.rb"
-require "aurora/additional_methods.rb"
+Dir[File.expand_path('../aurora', __FILE__) << '/*.rb'].each do |file|
+  require file
+end
 require "activerecord-import"
 require "tomlrb"
 

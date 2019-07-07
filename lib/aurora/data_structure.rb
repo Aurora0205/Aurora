@@ -12,7 +12,7 @@ class DataStructure
     end
 
     private
-
+    
     def get_col_type str_model
       model = eval(str_model)
       model.columns.reduce(Hash.new) do |acc, col|

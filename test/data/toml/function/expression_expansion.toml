@@ -2,4 +2,4 @@
   loop = 3
   [Pref.col]
     name = "<['北海道', '青森県', '岩手県']>"
-    created_at = "<DateTime.parse('1997/02/05')>"
+    created_at = "<Date.parse('1997/02/05')>"
