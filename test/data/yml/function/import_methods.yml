@@ -1,0 +1,4 @@
+- Pref: 
+  - loop: 3
+    col:
+      name: <pref_array>

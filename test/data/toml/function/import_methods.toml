@@ -1,0 +1,4 @@
+[[Pref]]
+  loop = 3
+  [Pref.col]
+    name = "<pref_array>"

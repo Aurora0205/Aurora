@@ -1,8 +1,11 @@
+require "aurora/additional_methods.rb"
+
 # for seed data
 class ExpressionParser
   class << self
     FOREIGN_KEY_SYMBOL = "F|"
     def parse config_val, maked
+      require AdditionalMethods.filepath if AdditionalMethods.filepath.present?
       case 
       when config_val.instance_of?(Array)
         return config_val
@@ -34,6 +37,7 @@ class LoopExpressionParser
   class << self
     FOREIGN_KEY_SYMBOL = "F|"
     def parse config_val, maked
+      require AdditionalMethods.filepath if AdditionalMethods.filepath.present?
       case 
       when config_val.instance_of?(Array)
         return config_val.size

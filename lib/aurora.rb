@@ -5,6 +5,7 @@ require "aurora/loader/loader.rb"
 require "aurora/option/option.rb"
 require "aurora/seeder/seeder.rb"
 require "aurora/regex.rb"
+require "aurora/additional_methods.rb"
 require "activerecord-import"
 require "tomlrb"
 
@@ -16,6 +17,14 @@ module Aurora
       contents = load_file(filepath)
       data = DataStructure.gen(contents)
       DataRegister.regist(data)
+    end
+
+    def import filepath
+      AdditionalMethods.import(filepath)
+    end
+
+    def reset
+      AdditionalMethods.remove()
     end
 
     private

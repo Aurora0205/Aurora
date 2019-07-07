@@ -1,6 +1,12 @@
 require 'test_helper'
 
 class Aurora::TomlTest < ActiveSupport::TestCase
+
+  def setup 
+    # reset import method dataes
+    Aurora.reset
+  end
+
   test "truth" do
     assert_kind_of Module, Aurora
   end
@@ -137,11 +143,20 @@ class Aurora::TomlTest < ActiveSupport::TestCase
   test "escape" do
     # Tomlrb return parse error, so this test commnet out
     # must change parse of toml component
-=begin
-    Aurora.execute("test/data/toml/function/escape.toml")
-    assert_equal 3, Pref.all.count
-    assert_equal 3, Pref.where(name: "<['北海道', '青森県', '岩手県']>").count
-    assert_equal 3, Member.where(name: "F|Pref").count
-=end
+
+    # Aurora.execute("test/data/toml/function/escape.toml")
+    # assert_equal 3, Pref.all.count
+    # assert_equal 3, Pref.where(name: "<['北海道', '青森県', '岩手県']>").count
+    # assert_equal 3, Member.where(name: "F|Pref").count
+  end
+
+  # outline: whether 'import methods function' works
+  # expected value: registerd escaped str data
+  test "import methods" do
+    Aurora.import("./test/data/methods.rb")
+    Aurora.execute("test/data/toml/function/import_methods.toml")
+    assert_equal true, Pref.where(name: "北海道").present?
+    assert_equal true, Pref.where(name: "青森県").present?
+    assert_equal true, Pref.where(name: "岩手県").present?
   end
 end
