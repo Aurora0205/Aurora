@@ -1,11 +1,10 @@
 class Option
   class << self
-
     def gen option
       # shape option data
       # [option1, option2] => { select: [option2], add: [option1] }
       # [] => { select: [], add: [] }
-      option.nil? ? { select: [], add: [] }: separate(option)
+      option.nil? ? { select: [], add: [] } : separate(option)
     end
 
     def apply arr, option_conf, cnt = 0
@@ -32,7 +31,8 @@ class Option
       return arr.sample if option == "random"
 
       # default return rotate
-      arr.rotate(cnt).first
+      return arr.first if cnt.zero?
+      arr.rotate!(1).first
     end
 
     def add option, val, cnt

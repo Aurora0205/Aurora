@@ -18,7 +18,7 @@ class DataRegister
           set_default_seed(e)
           # seed_arr: [[col1_element, col1_element], [col2_element, col2_element]...]
           seed_arr = get_seed_arr(model, e, maked)
-
+          
           # optimize is more faster than activerecord-import
           # however, sql.conf setting is necessary to use
           if e[:optimize] 
@@ -52,6 +52,7 @@ class DataRegister
     end
     
     def get_seed_arr model, config_data, maked
+
       # set expand expression '<>' and ':' and so on...
       set_expand_expression(config_data, maked)
 
@@ -61,7 +62,7 @@ class DataRegister
       if apply_autoincrement?(config_data[:autoincrement])
         set_autoincrement(config_data, model, loop_size)
       end
-
+  
       config_data[:col].map do |key, val| 
         option_conf = options.nil? ? nil : Option.gen(options[key])
         loop_size.times.map.with_index do |_, idx|
@@ -78,7 +79,8 @@ class DataRegister
 
     def set_autoincrement config_data, model, loop_size
       last_record = model.last
-      additions = model.all.count + loop_size
+      # use pluck to optimize(suppress make object)
+      additions = model.all.pluck(:id).size + loop_size      
       latest_id = last_record.nil? ? 1 : last_record.id + 1
       config_data[:col][:id] = [*latest_id..additions]
     end
@@ -97,7 +99,9 @@ class DataRegister
     end
 
     def get_seed arr, cnt
-      arr.rotate(cnt).first
+      # default return rotate
+      return arr.first if cnt.zero?
+      arr.rotate!(1).first
     end
 
     def get_seed_with_option arr, option, cnt

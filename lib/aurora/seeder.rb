@@ -24,7 +24,7 @@ class Seeder
     def make_string_array n, sql_type
       if is_enum?(sql_type)
         # convert enum('e1', 'e2', 'e3') to ["e1", "e2", "e3"]
-        return sql_type[5..-2].gsub("'", "").split(",")
+        return sql_type[5..-2].tr("'", "").split(",")
       else
         return Array.new(n).map{  SecureRandom.hex(20) }
       end

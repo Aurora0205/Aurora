@@ -23,7 +23,7 @@ class ExpressionParser
       else 
         if config_val.instance_of?(String)
           # escape \\
-          [config_val.gsub("\\","")]
+          [config_val.tr("\\","")]
         else
           [config_val]
         end
