@@ -132,6 +132,26 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal true, Member.where(name: "茨城県").present?
   end
 
+  # outline: whether 'maked function' works when written in same model
+  # expected value: registerd 3 datas
+  test "maked(same model)" do
+    Aurora.import("./test/data/methods.rb")
+    Aurora.execute("test/data/yml/function/maked/same_model.yml")
+    assert_equal 3, Member.all.count
+
+    tarou = Member.find_by(name: "Tarou")
+    assert_equal "Tarou", tarou.remarks
+    assert_equal Date.parse('1997/02/05'), tarou.birthday
+
+    jirou = Member.find_by(name: "Jirou")
+    assert_equal "Jirou", jirou.remarks
+    assert_equal Date.parse('1997/02/04'), jirou.birthday
+
+    saburou = Member.find_by(name: "Saburou")
+    assert_equal "Saburou", saburou.remarks
+    assert_equal Date.parse('1997/02/03'), saburou.birthday
+  end
+
   # outline: whether 'expression_expansion' of loop works
   # expected value: registerd 3 datas
   test "expression_expansion of loop" do

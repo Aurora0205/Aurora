@@ -1,0 +1,10 @@
+[[Pref]]
+  loop = 3
+  [Pref.col]
+    name = ["北海道", "青森県", "岩手県"]
+[[Member]]
+  loop = 3
+  [Member.col]
+    name: ["Tarou", "Jirou", "Saburou"]
+    remarks: "<maked[:Member][:name]>"
+    birthday: "<convert_name_to_birthday(maked[:Member][:name])>"

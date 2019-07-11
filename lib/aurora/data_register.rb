@@ -17,7 +17,7 @@ class DataRegister
           # if there is no setting data, set default seed data
           set_default_seed(e)
           # seed_arr: [[col1_element, col1_element], [col2_element, col2_element]...]
-          seed_arr = get_seed_arr(model, e, maked)
+          seed_arr = get_seed_arr(model, key.to_sym, e, maked)
           
           # optimize is more faster than activerecord-import
           # however, sql.conf setting is necessary to use
@@ -25,11 +25,9 @@ class DataRegister
             # seed_arr.transpose: [[col1_element, col2_element], [col1_element, col2_element]...]
             insert_query = QueryBuilder.insert(table_name, col_arr, seed_arr.transpose)
             ActiveRecord::Base.connection.execute(insert_query)
-          else  
+          else
             model.import(col_arr, seed_arr.transpose, validate: false, timestamps: false)
           end
-
-          update_maked_data(maked, key.to_sym, col_arr, seed_arr)
         end
       end
     end
@@ -51,23 +49,29 @@ class DataRegister
       end
     end
     
-    def get_seed_arr model, config_data, maked
-
-      # set expand expression '<>' and ':' and so on...
-      set_expand_expression(config_data, maked)
-
+    def get_seed_arr model, sym_model, config_data, maked
       options = config_data[:option]
       loop_size = config_data[:loop]
 
       if apply_autoincrement?(config_data[:autoincrement])
         set_autoincrement(config_data, model, loop_size)
       end
-  
+
       config_data[:col].map do |key, val| 
+        # set expand expression '<>' and ':' and so on...
+        set_expand_expression(config_data, key, val, maked)
+        # get clone data to use 'maked function' correctly
+        # if it doesn't use clone, will be received destructive effect by rotate!
+        expanded_val = config_data[:col][key].clone
         option_conf = options.nil? ? nil : Option.gen(options[key])
-        loop_size.times.map.with_index do |_, idx|
-          option_conf.nil? ? get_seed(val, idx) : get_seed_with_option(val, option_conf, idx)
-        end
+        seed_data = 
+          loop_size.times.map.with_index do |_, idx|
+            option_conf.nil? ? get_seed(expanded_val, idx) : get_seed_with_option(expanded_val, option_conf, idx)
+          end
+          
+        update_maked_data(maked, sym_model, key, seed_data)
+
+        seed_data
       end
     end
 
@@ -85,12 +89,10 @@ class DataRegister
       config_data[:col][:id] = [*latest_id..additions]
     end
 
-    def set_expand_expression config_data, maked
-      config_data[:col].each do |key, val|
-        # if it exists type, there is no need for doing 'expand expression'
-        next if config_data[:type][key.to_sym].present?
-        config_data[:col][key.to_sym] = ExpressionParser.parse(val, maked)
-      end
+    def set_expand_expression config_data, key, val, maked
+      # if it exists type, there is no need for doing 'expand expression'
+      return if config_data[:type][key].present?
+      config_data[:col][key] = ExpressionParser.parse(val, maked)
     end
 
     def set_loop_expand_expression config_data, maked
@@ -108,18 +110,15 @@ class DataRegister
       Option.apply(arr, option, cnt)
     end
 
-    def update_maked_data maked, sym_model, col_arr, seed_arr
+    def update_maked_data maked, sym_model, col, seed
       # maked: { key: Model, value: {key: col1, val: [col1_element, col1_element]} }
-      if maked.has_key?(sym_model)
+      maked[sym_model] ||= Hash.new
+      if maked[sym_model].has_key?(col)
         # merge hash data
-        maked[sym_model].merge!([col_arr, seed_arr].transpose.to_h)do |_, oldval, newval|
-          oldval + newval
-        end
+        maked[sym_model][col] += seed
       else
-        maked[sym_model] = [col_arr, seed_arr].transpose.to_h
+        maked[sym_model][col] = seed
       end
-
-      maked
     end
 
     def output_log log
