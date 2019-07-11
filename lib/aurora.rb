@@ -2,7 +2,6 @@ Dir[File.expand_path('../aurora', __FILE__) << '/*.rb'].each do |file|
   require file
 end
 require "activerecord-import"
-require "tomlrb"
 
 module Aurora
   class NotFoundLoader < StandardError; end
@@ -28,13 +27,7 @@ module Aurora
       when ".toml"
         return TomlLoader.load(filepath)
       when ".yml"
-        # convert 'str_key' to 'symbol_key'
-        contents =
-          YmlLoader.load(filepath).each do |e|
-            e.deep_symbolize_keys!
-          end
-
-        return contents.inject(:merge)
+        return YmlLoader.load(filepath)
       else
         raise NotFoundLoader.new("not found loader")
       end

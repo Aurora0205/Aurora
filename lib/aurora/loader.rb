@@ -6,18 +6,16 @@ class FileLoader
   end
 end
 
-class TomlLoader < FileLoader
-  class << self
-    def load filepath
-      Tomlrb.load_file(filepath, symbolize_keys: true)
-    end
-  end
-end
-
 class YmlLoader < FileLoader
   class << self
     def load filepath
-      YAML.load_file(filepath)
+      # convert 'str_key' to 'symbol_key'
+      contents =
+        YAML.load_file(filepath).each do |e|
+          e.deep_symbolize_keys!
+        end
+
+      contents.inject(:merge)
     end
   end
 end
