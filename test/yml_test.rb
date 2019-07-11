@@ -11,14 +11,14 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_kind_of Module, Aurora
   end
 
-  # outline: whether autora can register with the minimum settings
+  # outline: whether aurora can register with the minimum settings
   # expected value: registerd 3 datas
   test "nothing" do
     Aurora.execute("test/data/yml/function/nothing_conf.yml")
     assert_equal 3, Pref.all.count
   end
 
-  # outline: whether autora can register with the same model
+  # outline: whether aurora can register with the same model
   # expected value: registerd 6 datas
   test "same model" do
     Aurora.execute("test/data/yml/function/same_model_conf.yml")
@@ -52,7 +52,7 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal true, Pref.where(id: 102).present?
   end
 
-  # outline: whether autora can register with the setting array 
+  # outline: whether aurora can register with the setting array 
   # expected value: registerd 3 datas
   #                 registerd ["北海道", "青森県", "岩手県"]
   test "insert setting array" do
@@ -63,12 +63,11 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal true, Pref.where(name: "岩手県").present?
   end
 
-  # outline: whether autora can register with the setting string
+  # outline: whether aurora can register with the setting string
   # expected value: registerd 3 datas
   #                 registerd "北海道"
   test "insert setting string" do
     Aurora.execute("test/data/yml/function/string_insert.yml")
-    
     assert_equal 3, Pref.all.count
     assert_equal 3, Pref.where(name: "北海道").count
   end
@@ -84,7 +83,7 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal true, Pref.where(name: "岩手県_2").present?
   end
 
-  # outline: whether autora can register with the foreign key
+  # outline: whether aurora can register with the foreign key
   # expected value: registerd 6 datas(pref: 3, member: 3)
   test "foreign_key" do
     Aurora.execute("test/data/yml/function/foreign_key_insert.yml")
@@ -93,7 +92,7 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal Pref.all.pluck(:id), Member.all.pluck(:pref_id)
   end
 
-  # outline: whether autora can register with the expression_expansion
+  # outline: whether aurora can register with the expression_expansion
   # expected value: registerd 3 datas
   #                 created_at: DateTime.parse("1997/02/05")
   test "expression_expansion" do
@@ -187,7 +186,7 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal true, Pref.where(name: "岩手県").present?
   end
 
-  # outline: whether autora can register after change parameter
+  # outline: whether aurora can register after change parameter
   # expected value: registerd 6 datas
   test "after change parameter" do
     aurora_data = Aurora.get_data("test/data/yml/function/array_insert.yml")
@@ -195,5 +194,15 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     aurora_data["Pref"][0][:loop] = 6
     Aurora.do_seed(aurora_data)
     assert_equal 6, Pref.all.count
+  end
+
+  # outline: whether 'combine_option function' works
+  # expected value: registerd 3 datas
+  test "combine_option" do
+    Aurora.execute("test/data/yml/function/combine_option.yml")
+    assert_equal 3, Pref.all.count
+    assert_equal true, Pref.where(name: "北海道_0").present?
+    assert_equal true, Pref.where(name: "北海道_1").present?
+    assert_equal true, Pref.where(name: "北海道_2").present?
   end
 end

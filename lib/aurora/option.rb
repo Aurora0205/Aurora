@@ -36,7 +36,8 @@ class Option
     end
 
     def add option, val, cnt
-      return val << "_#{cnt}" if option == "add_id"
+      # use '+', not use '<<' to avoid destructive effect
+      return val + "_#{cnt}" if option == "add_id"
 
       val
     end
