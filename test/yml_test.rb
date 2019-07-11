@@ -186,4 +186,14 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal true, Pref.where(name: "青森県").present?
     assert_equal true, Pref.where(name: "岩手県").present?
   end
+
+  # outline: whether autora can register after change parameter
+  # expected value: registerd 6 datas
+  test "after change parameter" do
+    aurora_data = Aurora.get_data("test/data/yml/function/array_insert.yml")
+    assert_equal 3, aurora_data["Pref"][0][:loop]
+    aurora_data["Pref"][0][:loop] = 6
+    Aurora.do_seed(aurora_data)
+    assert_equal 6, Pref.all.count
+  end
 end

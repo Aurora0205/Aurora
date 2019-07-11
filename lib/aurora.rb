@@ -21,11 +21,19 @@ module Aurora
       AdditionalMethods.remove()
     end
 
+    def get_data filepath
+      contents = load_file(filepath)
+      DataStructure.gen(contents)
+    end
+
+    def do_seed data
+      DataRegister.regist(data)
+    end
+    
     private
+
     def load_file filepath
       case File.extname(filepath)
-      when ".toml"
-        return TomlLoader.load(filepath)
       when ".yml"
         return YmlLoader.load(filepath)
       else

@@ -26,7 +26,7 @@ class DataRegister
             insert_query = QueryBuilder.insert(table_name, col_arr, seed_arr.transpose)
             ActiveRecord::Base.connection.execute(insert_query)
           else
-            model.import(col_arr, seed_arr.transpose, validate: false, timestamps: false)
+            model.import(col_arr, seed_arr.transpose, validate: e[:validate], timestamps: false)
           end
         end
       end
