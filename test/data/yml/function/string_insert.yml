@@ -1,4 +1,5 @@
-- Pref: 
-  - loop: 3
+Default:
+  Pref: 
+    loop: 1
     col:
       name: "北海道"

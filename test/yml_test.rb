@@ -68,8 +68,8 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   #                 registerd "北海道"
   test "insert setting string" do
     Aurora.execute("test/data/yml/function/string_insert.yml")
-    assert_equal 3, Pref.all.count
-    assert_equal 3, Pref.where(name: "北海道").count
+    assert_equal 1, Pref.all.count
+    assert_equal 1, Pref.where(name: "北海道").count
   end
 
   # outline: whether 'add_id' works
@@ -190,8 +190,8 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # expected value: registerd 6 datas
   test "after change parameter" do
     aurora_data = Aurora.get_data("test/data/yml/function/array_insert.yml")
-    assert_equal 3, aurora_data["Pref"][0][:loop]
-    aurora_data["Pref"][0][:loop] = 6
+    assert_equal 3, aurora_data[0][1][:loop]
+    aurora_data[0][1][:loop] = 6
     Aurora.do_seed(aurora_data)
     assert_equal 6, Pref.all.count
   end

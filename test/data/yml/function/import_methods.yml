@@ -1,4 +1,5 @@
-- Pref: 
-  - loop: 3
+Default:
+  Pref: 
+    loop: 3
     col:
       name: <pref_array>

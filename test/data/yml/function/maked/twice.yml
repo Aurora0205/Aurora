@@ -1,12 +1,21 @@
-- Pref: 
-  - loop: 2
+Default:
+  Pref: 
+    loop: 2
     col:
       name: ["北海道", "青森県"]
-  - loop: 2
-    col:
-      name: ["秋田県", "茨城県"]
-- Member:
-  - loop: 4
+  Member:
+    loop: 2
     col:
       name: <maked[:Pref][:name]>
-      pref_id: F|Pref
+      pref_id: <maked[:Pref][:id]>
+
+Default2:
+  Pref: 
+    loop: 2
+    col:
+      name: ["秋田県", "茨城県"]
+  Member:
+    loop: 2
+    col:
+      name: <maked[:Pref][:name]>
+      pref_id: <maked[:Pref][:id]>

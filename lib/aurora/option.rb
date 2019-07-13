@@ -8,8 +8,8 @@ class Option
     end
 
     def apply arr, option_conf, cnt = 0
-      selected_val = select(option_conf[:select].first, arr, cnt)
-      add(option_conf[:add].first, selected_val, cnt)
+      selected_val = select(option_conf[:select], arr, cnt)
+      add(option_conf[:add], selected_val, cnt)
     end
 
 
@@ -22,8 +22,8 @@ class Option
       add_filter = ->(name){ ["add_id"].include?(name) }
 
       {
-        select: option.select{|s| select_filter.call(s)},
-        add: option.select{|s| add_filter.call(s)}
+        select: option.find{|s| select_filter.call(s)},
+        add: option.find{|s| add_filter.call(s)}
       }
     end
 

@@ -1,17 +1,27 @@
 class DataStructure
   class << self
     def gen data
-      data.reduce(Hash.new) do |acc, r|
-        str_model = r.first.to_s
-        acc[str_model] = r.second
-        # set col type info which was taked from db
-        set_col_type(acc[str_model], get_col_type(str_model))
-
-        acc
+      data.reduce([]) do |acc, r|
+        # r.second is block_data, like { Pref: {loop: 3}, Member: {loop: 3}... }
+        block_data = r.second
+        gen_structure(acc, block_data)
       end
     end
 
     private
+
+    def gen_structure acc, block_data
+      block_data.reduce(acc) do |acc, r|
+        # r[0] is symbolize model
+        # convert symbol to string
+        r[0] = r[0].to_s
+        # r.second is config_data, like {loop: 3, ...}
+        config_data = r.second
+        set_col_type(config_data, get_col_type(r[0]))
+
+        acc.push(r)
+      end
+    end
     
     def get_col_type str_model
       model = eval(str_model)
@@ -24,26 +34,22 @@ class DataStructure
 
     def set_col_type config_data, col
       col.each do |key, val|
+        config_data[:col] ||= Hash.new
+        symbol_col_name = key.to_sym
+        # config_data has not its column data
+        unless config_data[:col].has_key?(symbol_col_name)
+          # prepare setting to run default seed
+          # set nil to seed data
+          config_data[:col][symbol_col_name] = nil
 
-        config_data.each do |e|
-          e[:col] ||= Hash.new
-          # config_data has not its column data
-          unless e[:col].has_key?(key.to_sym)
-            # prepare setting to run default seed
+          # set type info
+          config_data[:type] ||= Hash.new
+          config_data[:type][symbol_col_name] = val[:type]
 
-            # set nil to seed data
-            e[:col][key.to_sym] = nil
-
-            # set type info
-            e[:type] ||= Hash.new
-            e[:type][key.to_sym] = val[:type]
-
-            # set sql_type info
-            e[:sql_type] ||= Hash.new
-            e[:sql_type][key.to_sym] = val[:sql_type]
-          end
+          # set sql_type info
+          config_data[:sql_type] ||= Hash.new
+          config_data[:sql_type][symbol_col_name] = val[:sql_type]
         end
-
       end
     end
 

@@ -1,38 +1,58 @@
 class DataRegister
   class << self
-    def regist config_data
-      # init maked data
-      maked ||= Hash.new
-      config_data.each do |key, val|
-        model = eval(key)
-        table_name = model.table_name
+    def regist data
+      # init maked to accumulate maded data
+      maked = Hash.new
+      # init model_data to cache data of model
+      model_data = Hash.new
+      data.each do |e|
+        str_model = e.first
+        cache_model_data(model_data, str_model)
+        # e.second is config_data
+        config_data = e.second
         # col_arr: [:col1, :col2, :col3]
-        col_arr = val.first[:col].keys
-        
-        # each model 
-        val.each do |e|
-          output_log(e[:log]) 
-          # set expand expression for loop '<>' and ':' and so on...
-          set_loop_expand_expression(e, maked)
-          # if there is no setting data, set default seed data
-          set_default_seed(e)
-          # seed_arr: [[col1_element, col1_element], [col2_element, col2_element]...]
-          seed_arr = get_seed_arr(model, key.to_sym, e, maked)
-          
-          # optimize is more faster than activerecord-import
-          # however, sql.conf setting is necessary to use
-          if e[:optimize] 
-            # seed_arr.transpose: [[col1_element, col2_element], [col1_element, col2_element]...]
-            insert_query = QueryBuilder.insert(table_name, col_arr, seed_arr.transpose)
-            ActiveRecord::Base.connection.execute(insert_query)
-          else
-            model.import(col_arr, seed_arr.transpose, validate: e[:validate], timestamps: false)
-          end
-        end
+        col_arr = config_data[:col].keys
+
+        # set expand expression for loop '<>' and ':' and so on...
+        set_loop_expand_expression(config_data, maked)
+        # if there is no setting data, set default seed data
+        set_default_seed(config_data)
+        # seed_arr: [[col1_element, col1_element], [col2_element, col2_element]...]
+        seed_arr = 
+          get_seed_arr(model_data[str_model][:model], 
+                       model_data[str_model][:sym_model], config_data, maked)
+
+        # execute insert
+        output_log(config_data[:log]) 
+        execute(model_data[str_model][:model], 
+                config_data, model_data[str_model][:table_name], col_arr, seed_arr)
       end
     end
 
     private
+
+    def execute model, config_data, table_name, col_arr, seed_arr
+      # optimize is more faster than activerecord-import
+      # however, sql.conf setting is necessary to use
+      if config_data[:optimize] 
+        # seed_arr.transpose: [[col1_element, col2_element], [col1_element, col2_element]...]
+        insert_query = QueryBuilder.insert(table_name, col_arr, seed_arr.transpose)
+        ActiveRecord::Base.connection.execute(insert_query)
+      else
+        model.import(col_arr, seed_arr.transpose, validate: config_data[:validate], timestamps: false)
+      end
+    end
+
+    def cache_model_data model_data, str_model
+      return if model_data[str_model].present?
+      
+      model = eval(str_model)
+      model_data[str_model] = {
+        model: model,
+        sym_model: str_model.to_sym,
+        table_name: model.table_name
+      }
+    end
 
     def set_default_seed config_data
       block = ->(str){ [:id].include?(str) }
@@ -113,12 +133,7 @@ class DataRegister
     def update_maked_data maked, sym_model, col, seed
       # maked: { key: Model, value: {key: col1, val: [col1_element, col1_element]} }
       maked[sym_model] ||= Hash.new
-      if maked[sym_model].has_key?(col)
-        # merge hash data
-        maked[sym_model][col] += seed
-      else
-        maked[sym_model][col] = seed
-      end
+      maked[sym_model][col] = seed
     end
 
     def output_log log

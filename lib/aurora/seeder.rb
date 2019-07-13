@@ -26,7 +26,7 @@ class Seeder
         # convert enum('e1', 'e2', 'e3') to ["e1", "e2", "e3"]
         return sql_type[5..-2].tr("'", "").split(",")
       else
-        return Array.new(n).map{  SecureRandom.hex(20) }
+        return Array.new(n).map{ SecureRandom.hex(20) }
       end
     end
   end
