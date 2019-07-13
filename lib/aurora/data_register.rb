@@ -55,23 +55,25 @@ class DataRegister
     end
 
     def set_default_seed config_data
-      block = ->(str){ [:id].include?(str) }
+      block = ->(symbol){ :id == symbol }
+      # each column type, key is symbolize column name
       config_data[:type].each do |key, _|
-        # if there is data already, skip
-        next if config_data[:col][key.to_sym].present?
         # if it is id, skip
         next if block.call(key)
+        # if there is data already, skip
+        next if config_data[:col][key].present?
 
-        config_data[:col][key.to_sym] = 
+        config_data[:col][key] = 
           Seeder.gen(config_data[:loop], 
-                     config_data[:type][key.to_sym], 
-                     config_data[:sql_type][key.to_sym]) 
+                     config_data[:type][key], 
+                     config_data[:sql_type][key]) 
       end
     end
     
     def get_seed_arr model, sym_model, config_data, maked
       options = config_data[:option]
       loop_size = config_data[:loop]
+
 
       if apply_autoincrement?(config_data[:autoincrement])
         set_autoincrement(config_data, model, loop_size)
@@ -84,14 +86,18 @@ class DataRegister
         # if it doesn't use clone, will be received destructive effect by rotate!
         expanded_val = config_data[:col][key].clone
         option_conf = options.nil? ? nil : Option.gen(options[key])
-        seed_data = 
-          loop_size.times.map.with_index do |_, idx|
-            option_conf.nil? ? get_seed(expanded_val, idx) : get_seed_with_option(expanded_val, option_conf, idx)
-          end
-          
-        update_maked_data(maked, sym_model, key, seed_data)
+        # Take count yourself, because .with_index is slow
+        cnt = 0
+        seeds = 
+          loop_size.times.map do
+            seed = option_conf.nil? ? get_seed(expanded_val, cnt) : get_seed_with_option(expanded_val, option_conf, cnt)
+            cnt += 1
 
-        seed_data
+            seed
+          end
+        update_maked_data(maked, sym_model, key, seeds)
+
+        seeds
       end
     end
 
@@ -121,9 +127,7 @@ class DataRegister
     end
 
     def get_seed arr, cnt
-      # default return rotate
-      return arr.first if cnt.zero?
-      arr.rotate!(1).first
+      get_rotated_val(arr, cnt)
     end
 
     def get_seed_with_option arr, option, cnt

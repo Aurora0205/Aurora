@@ -10,7 +10,7 @@ class YmlLoader < FileLoader
   class << self
     def load filepath
       # convert 'str_key' to 'symbol_key'
-      YAML.load_file(filepath).deep_symbolize_keys
+      YAML.load_file(filepath).deep_symbolize_keys!
     end
   end
 end

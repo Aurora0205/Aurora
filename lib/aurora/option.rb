@@ -12,7 +12,6 @@ class Option
       add(option_conf[:add], selected_val, cnt)
     end
 
-
     private
 
     def separate option
@@ -29,10 +28,8 @@ class Option
 
     def select option, arr, cnt
       return arr.sample if option == "random"
-
       # default return rotate
-      return arr.first if cnt.zero?
-      arr.rotate!(1).first
+      get_rotated_val(arr, cnt)
     end
 
     def add option, val, cnt
