@@ -17,5 +17,4 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 5.0.0"
   s.add_dependency 'activerecord-import', '>= 1.00'
-  s.add_dependency 'tomlrb', '>= 1.00'
 end
