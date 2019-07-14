@@ -1,4 +1,4 @@
-# Aurora
+# ![s_s_aurora logo](https://user-images.githubusercontent.com/52039582/61178138-71823100-a621-11e9-92cd-5afe46a76434.png)
 
 Aurora is fast seeder of 'Ruby on Rails' that uses .yml
 Currently only mysql supported
@@ -44,13 +44,15 @@ The gem is available as open source under the terms of the [MIT License](http://
 Introduce how to execute and write configuration file.   
 If you want to know more information file settings,  please refer to the test
 
-### How to execute
+### Extecute
 After write configuration file, execute the following source code in seed.rb of Ruby on Rails
 
 ```
 Aurora.execute(ConfigrationFilePath...)
 ```
-### How to write configuration file  
+### Configration file
+
+Introduce how to write configuration file
 
 #### Definition for explanation  
 Table name below is 'prefs' and model name is 'Pref'
@@ -77,7 +79,6 @@ Table name below is 'members' and model name is 'Member'
 
 
 #### Default data
-
 If there is no column definition, prepared data is registerd three times  
 id column is basically registerd by autoincrement
 
