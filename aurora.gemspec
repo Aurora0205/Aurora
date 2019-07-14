@@ -5,7 +5,7 @@ require "aurora/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "aurora"
+  s.name        = "k_aurora"
   s.version     = Aurora::VERSION
   s.authors     = ["Kashiwara"]
   s.email       = ["aurora0205k@gmail.com"]
