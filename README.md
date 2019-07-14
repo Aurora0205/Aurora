@@ -24,7 +24,7 @@ Also, If you enable 'optimize option', 10,000 records can regist in 0.25s on ave
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'aurora'
+gem 'k_aurora'
 ```
 
 And then execute:
@@ -34,7 +34,7 @@ $ bundle
 
 Or install it yourself as:
 ```bash
-$ gem install aurora
+$ gem install k_aurora
 ```
 
 ## License
