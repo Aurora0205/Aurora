@@ -1,5 +1,8 @@
 # ![s_s_aurora logo](https://user-images.githubusercontent.com/52039582/61178138-71823100-a621-11e9-92cd-5afe46a76434.png)
 
+[![Gem Version](https://badge.fury.io/rb/k_aurora.svg)](https://badge.fury.io/rb/k_aurora)
+[![Build Status](https://travis-ci.org/Aurora0205/Aurora.svg?branch=master)](https://travis-ci.org/Aurora0205/Aurora)
+
 Aurora is fast seeder of 'Ruby on Rails' that uses .yml
 Currently only mysql supported
 
