@@ -55,7 +55,7 @@ Aurora.execute(ConfigrationFilePath...)
 ```
 ### Configration file
 
-Introduce how to write configuration file
+Introduce how to write yml configuration file
 
 #### Definition for explanation  
 Table name below is 'prefs' and model name is 'Pref'
