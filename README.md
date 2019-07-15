@@ -48,7 +48,7 @@ Introduce how to execute and write configuration file.
 If you want to know more information file settings,  please refer to the test
 
 ### Extecute
-After write configuration file, execute the following source code in seed.rb of Ruby on Rails
+After write configuration file, execute the following source code in seeds.rb of Ruby on Rails
 
 ```
 Aurora.execute(ConfigrationFilePath...)
@@ -193,7 +193,7 @@ def pref_name
   ["Hokkaido", "Aomori", "Iwate"]
 end
 ```
-and execute the following source code in seed.rb of Ruby on Rails
+and execute the following source code in seeds.rb of Ruby on Rails
 
 ```
 Aurora.import(MethodFilePath...)
