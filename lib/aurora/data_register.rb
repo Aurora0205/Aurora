@@ -63,10 +63,7 @@ class DataRegister
         # if there is data already, skip
         next if config_data[:col][key].present?
 
-        config_data[:col][key] = 
-          Seeder.gen(config_data[:loop], 
-                     config_data[:type][key], 
-                     config_data[:sql_type][key]) 
+        config_data[:col][key] = Seeder.gen(config_data, key) 
       end
     end
     

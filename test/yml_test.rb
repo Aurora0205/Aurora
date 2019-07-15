@@ -205,4 +205,13 @@ class Aurora::YmlTest < ActiveSupport::TestCase
     assert_equal true, Pref.where(name: "北海道_1").present?
     assert_equal true, Pref.where(name: "北海道_2").present?
   end
+
+  # outline: whether 'automatic foreign key' works
+  # expected value: registerd 3 datas
+  test "automatic foreign_key" do
+    Aurora.execute("test/data/yml/function/automatic_foreign_key.yml")
+    assert_equal 3, Pref.all.count
+    assert_equal 3, Member.all.count
+    assert_equal Pref.all.pluck(:id), Member.all.pluck(:pref_id)
+  end
 end
