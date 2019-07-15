@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Kashiwara"]
   s.email       = ["aurora0205k@gmail.com"]
   s.summary     = "This gem is seeder which is very usefull"
-  s.description = "Aurora is fast seeder of 'Ruby on Rails' that uses .yml"
+  s.description = "Aurora is fast seeder of 'Ruby on Rails' URL: https://github.com/Aurora0205/Aurora"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
