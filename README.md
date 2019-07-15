@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/k_aurora.svg)](https://badge.fury.io/rb/k_aurora)
 [![Build Status](https://travis-ci.org/Aurora0205/Aurora.svg?branch=master)](https://travis-ci.org/Aurora0205/Aurora)
 
-Aurora is fast seeder of 'Ruby on Rails' that uses .yml
+Aurora is fast seeder of 'Ruby on Rails' that uses .yml  
 Currently only mysql supported
 
 ## Features
@@ -145,8 +145,10 @@ Default:
 ```
 
 #### Foreign key
-What a means is ' F| ' foreign key
 
+**※ Updates now automatically register foreign keys, but it will be easy to understand, so it is better to write**
+
+What a means is ' F| ' foreign key
 In the following source code, Foreign key of prefectures is registerd
 
 ```
