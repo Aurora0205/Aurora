@@ -197,6 +197,7 @@ end
 and execute the following source code in seeds.rb of Ruby on Rails
 
 ```
+require "aurora"
 Aurora.import(MethodFilePath...)
 Aurora.execute(ConfigrationFilePath...)
 ```
