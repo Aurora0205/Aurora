@@ -8,12 +8,15 @@ Currently only mysql supported
 
 ## NOTICE
 
-現在既存にあるGemと名前が被ったせいでrequireしないと使えいない状況にあります
-申し訳ありませんが、対応をお待ちください
+~~現在既存にあるGemと名前が被ったせいでrequireしないと使えいない状況にあります
+申し訳ありませんが、対応をお待ちください~~
 
+~~It is in a situation where it can not be used unless it is required due to the fact that the existing Gem and the name have been acquired.
+Sorry, please wait for the response~~
 
-It is in a situation where it can not be used unless it is required due to the fact that the existing Gem and the name have been acquired.
-Sorry, please wait for the response
+AuroraからKAuroraに名前を変更して解決しました。ご迷惑をおかけして申し訳ございませんでした。
+
+Resolved by changing the name from Aurora to KAurora. We apologize for the inconvenience.
 
 
 ## Features
@@ -61,7 +64,6 @@ If you want to know more information file settings,  please refer to the test
 After write configuration file, execute the following source code in seeds.rb of Ruby on Rails
 
 ```
-require "k_aurora"
 KAurora.execute(ConfigrationFilePath...)
 ```
 ### Configration file
@@ -207,7 +209,6 @@ end
 and execute the following source code in seeds.rb of Ruby on Rails
 
 ```
-require "k_aurora"
 KAurora.import(MethodFilePath...)
 KAurora.execute(ConfigrationFilePath...)
 ```
