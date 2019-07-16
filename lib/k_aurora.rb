@@ -1,9 +1,9 @@
-Dir[File.expand_path('../aurora', __FILE__) << '/*.rb'].each do |file|
+Dir[File.expand_path('../k_aurora', __FILE__) << '/*.rb'].each do |file|
   require file
 end
 require "activerecord-import"
 
-module Aurora
+module KAurora
   class NotFoundLoader < StandardError; end
 
   class << self
@@ -29,7 +29,7 @@ module Aurora
     def do_seed data
       DataRegister.regist(data)
     end
-    
+
     private
 
     def load_file filepath

@@ -1,9 +1,9 @@
 # ![s_s_aurora logo](https://user-images.githubusercontent.com/52039582/61178138-71823100-a621-11e9-92cd-5afe46a76434.png)
 
 [![Gem Version](https://badge.fury.io/rb/k_aurora.svg)](https://badge.fury.io/rb/k_aurora)
-[![Build Status](https://travis-ci.org/Aurora0205/Aurora.svg?branch=master)](https://travis-ci.org/Aurora0205/Aurora)
+[![Build Status](https://travis-ci.org/Aurora0205/KAurora.svg?branch=master)](https://travis-ci.org/Aurora0205/KAurora)
 
-Aurora is fast seeder of 'Ruby on Rails' that uses .yml  
+KAurora is fast seeder of 'Ruby on Rails' that uses .yml
 Currently only mysql supported
 
 ## NOTICE
@@ -19,11 +19,11 @@ Sorry, please wait for the response
 ## Features
 
 ### Easy to use
-Aurora can be used only for simple configuration file settings  
+KAurora can be used only for simple configuration file settings
 You don't have to write a program for seeder
 
 ### Fast speed
-If it is the following table, 10,000 records can regist in 0.46s on average  
+If it is the following table, 10,000 records can regist in 0.46s on average
 Also, If you enable 'optimize option', 10,000 records can regist in 0.25s on average
 
 |Field|Type|NULL|
@@ -54,21 +54,21 @@ $ gem install k_aurora
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
 ## Usage
-Introduce how to execute and write configuration file.   
+Introduce how to execute and write configuration file.
 If you want to know more information file settings,  please refer to the test
 
 ### Extecute
 After write configuration file, execute the following source code in seeds.rb of Ruby on Rails
 
 ```
-require "aurora"
-Aurora.execute(ConfigrationFilePath...)
+require "k_aurora"
+KAurora.execute(ConfigrationFilePath...)
 ```
 ### Configration file
 
 Introduce how to write yml configuration file
 
-#### Definition for explanation  
+#### Definition for explanation
 Table name below is 'prefs' and model name is 'Pref'
 
 |Field|Type|NULL|
@@ -93,21 +93,21 @@ Table name below is 'members' and model name is 'Member'
 
 
 #### Default data
-If there is no column definition, prepared data is registerd three times  
+If there is no column definition, prepared data is registerd three times
 id column is basically registerd by autoincrement
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
 ```
 
 
-In the following source code, id, created_at, updated_at will be registerd with the prepared data  
+In the following source code, id, created_at, updated_at will be registerd with the prepared data
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     col:
       name: "Hokkaido"
@@ -118,7 +118,7 @@ Array data is registerd one by one
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     col:
       name: ["Hokkaido", "Aomori", "Iwate"]
@@ -129,7 +129,7 @@ Registration is possible using registerd data
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 2
     col:
       name: ["Hokkaido", "Aomori"]
@@ -142,11 +142,11 @@ Default:
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     col:
       name: ["Hokkaido", "Aomori", "Iwate"]
-  Member: 
+  Member:
     loop: 3
     col:
       name: ["Tarou", "Jirou", "Saburou"]
@@ -164,7 +164,7 @@ In the following source code, Foreign key of prefectures is registerd
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     col:
       name: ["Hokkaido", "Aomori", "Iwate"]
@@ -175,12 +175,12 @@ Default:
 ```
 
 #### Expression expansion
-What a means is '< >' expression expansion  
+What a means is '< >' expression expansion
 You can run ruby code in '< >'
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     col:
       name: <["Hokkaido", "Aomori", "Iwate"]>
@@ -188,11 +188,11 @@ Default:
 ```
 
 #### Add method
-You can add method and use it in aurora
+You can add method and use it in k_aurora
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     col:
       name: <pref_name>
@@ -207,9 +207,9 @@ end
 and execute the following source code in seeds.rb of Ruby on Rails
 
 ```
-require "aurora"
-Aurora.import(MethodFilePath...)
-Aurora.execute(ConfigrationFilePath...)
+require "k_aurora"
+KAurora.import(MethodFilePath...)
+KAurora.execute(ConfigrationFilePath...)
 ```
 
 
@@ -219,7 +219,7 @@ Registration is possible using two blocks
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
 Default2:
   Pref:
@@ -230,7 +230,7 @@ and, You can change the name of the block
 
 ```
 Hoge:
-  Pref: 
+  Pref:
     loop: 3
 Fuga:
   Pref:
@@ -243,7 +243,7 @@ Shuffle seed data when regist
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     col:
       name: ["Hokkaido", "Aomori", "Iwate"]
@@ -262,7 +262,7 @@ Add individual number to seed data of String type
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     col:
       name: ["Hokkaido", "Aomori", "Iwate"]
@@ -279,7 +279,7 @@ Combination of options is possible
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     col:
       name: ["Hokkaido", "Aomori", "Iwate"]
@@ -299,7 +299,7 @@ Run validation when regist
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     validate: true
 ```
@@ -312,7 +312,7 @@ If you disable the setting, you can register id data prepared by myself
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     autoincrement: false
     col:
@@ -321,11 +321,11 @@ Default:
 
 #### Optimize
 
-If you enable 'optimize', Aurora Run a fast query builder, but instead of disabling validation
+If you enable 'optimize', KAurora Run a fast query builder, but instead of disabling validation
 
 ```
 Default:
-  Pref: 
+  Pref:
     loop: 3
     optimaize: true
 ```

@@ -1,4 +1,4 @@
-require "aurora/additional_methods.rb"
+require "k_aurora/additional_methods.rb"
 
 # for seed data
 class ExpressionParser
@@ -6,7 +6,7 @@ class ExpressionParser
     FOREIGN_KEY_SYMBOL = "F|"
     def parse config_val, maked
       require AdditionalMethods.filepath if AdditionalMethods.filepath.present?
-      case 
+      case
       when config_val.instance_of?(Array)
         return config_val
       when config_val.nil?
@@ -20,7 +20,7 @@ class ExpressionParser
         # remove '<>'
         expression = config_val.strip[1..-2]
         return self.parse(eval(expression), maked)
-      else 
+      else
         if config_val.instance_of?(String)
           # escape \\
           [config_val.tr("\\","")]
@@ -38,7 +38,7 @@ class LoopExpressionParser
     FOREIGN_KEY_SYMBOL = "F|"
     def parse config_val, maked
       require AdditionalMethods.filepath if AdditionalMethods.filepath.present?
-      case 
+      case
       when config_val.instance_of?(Array)
         return config_val.size
       when config_val.instance_of?(Integer)
@@ -54,7 +54,7 @@ class LoopExpressionParser
         # remove '<>'
         expression = config_val.strip[1..-2]
         return self.parse(eval(expression), maked)
-      else 
+      else
         return 1
       end
     end
@@ -64,11 +64,11 @@ end
 FOREIGN_KEY = /^F\|[A-Z][A-Za-z0-9]*$/
 def is_foreign_key? val;
   return false unless val.kind_of?(String)
-  FOREIGN_KEY =~ val 
+  FOREIGN_KEY =~ val
 end
 
 EXPRESSION = /^\s*<.*>\s*$/
 def is_expression? val
   return false unless val.kind_of?(String)
-  EXPRESSION =~ val 
+  EXPRESSION =~ val
 end

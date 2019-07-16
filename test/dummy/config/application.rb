@@ -3,7 +3,7 @@ require_relative 'boot'
 require 'rails/all'
 
 Bundler.require(*Rails.groups)
-require "aurora"
+require "k_aurora"
 
 module Dummy
   class Application < Rails::Application

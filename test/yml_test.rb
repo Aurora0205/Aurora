@@ -1,27 +1,27 @@
 require 'test_helper'
 
-class Aurora::YmlTest < ActiveSupport::TestCase
+class KAurora::YmlTest < ActiveSupport::TestCase
 
-  def setup 
+  def setup
     # reset import method dataes
-    Aurora.reset
+    KAurora.reset
   end
 
   test "truth" do
-    assert_kind_of Module, Aurora
+    assert_kind_of Module, KAurora
   end
 
-  # outline: whether aurora can register with the minimum settings
+  # outline: whether k_aurora can register with the minimum settings
   # expected value: registerd 3 datas
   test "nothing" do
-    Aurora.execute("test/data/yml/function/nothing_conf.yml")
+    KAurora.execute("test/data/yml/function/nothing_conf.yml")
     assert_equal 3, Pref.all.count
   end
 
-  # outline: whether aurora can register with the same model
+  # outline: whether k_aurora can register with the same model
   # expected value: registerd 6 datas
   test "same model" do
-    Aurora.execute("test/data/yml/function/same_model_conf.yml")
+    KAurora.execute("test/data/yml/function/same_model_conf.yml")
     assert_equal 6, Pref.all.count
   end
 
@@ -29,12 +29,12 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # expected value: registerd 6 datas
   #                 registed autoincrement_id
   test "autoincrement_id" do
-    Aurora.execute("test/data/yml/function/nothing_conf.yml")
+    KAurora.execute("test/data/yml/function/nothing_conf.yml")
     assert_equal 3, Pref.all.count
     assert_equal true, Pref.where(id: 1).present?
     assert_equal true, Pref.where(id: 2).present?
     assert_equal true, Pref.where(id: 3).present?
-    Aurora.execute("test/data/yml/function/nothing_conf.yml")
+    KAurora.execute("test/data/yml/function/nothing_conf.yml")
     assert_equal 6, Pref.all.count
     assert_equal true, Pref.where(id: 4).present?
     assert_equal true, Pref.where(id: 5).present?
@@ -45,29 +45,29 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # expected value: registerd 3 datas
   #                 registed autoincrement_id
   test "no autoincrement_id" do
-    Aurora.execute("test/data/yml/function/no_autoincrement.yml")
+    KAurora.execute("test/data/yml/function/no_autoincrement.yml")
     assert_equal 3, Pref.all.count
     assert_equal true, Pref.where(id: 100).present?
     assert_equal true, Pref.where(id: 101).present?
     assert_equal true, Pref.where(id: 102).present?
   end
 
-  # outline: whether aurora can register with the setting array 
+  # outline: whether k_aurora can register with the setting array
   # expected value: registerd 3 datas
   #                 registerd ["北海道", "青森県", "岩手県"]
   test "insert setting array" do
-    Aurora.execute("test/data/yml/function/array_insert.yml")
+    KAurora.execute("test/data/yml/function/array_insert.yml")
     assert_equal 3, Pref.all.count
     assert_equal true, Pref.where(name: "北海道").present?
     assert_equal true, Pref.where(name: "青森県").present?
     assert_equal true, Pref.where(name: "岩手県").present?
   end
 
-  # outline: whether aurora can register with the setting string
+  # outline: whether k_aurora can register with the setting string
   # expected value: registerd 3 datas
   #                 registerd "北海道"
   test "insert setting string" do
-    Aurora.execute("test/data/yml/function/string_insert.yml")
+    KAurora.execute("test/data/yml/function/string_insert.yml")
     assert_equal 1, Pref.all.count
     assert_equal 1, Pref.where(name: "北海道").count
   end
@@ -76,27 +76,27 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # expected value: registerd 3 datas
   #                 registerd ["北海道_1", "青森県_2", "岩手県_3"]
   test "add_id option" do
-    Aurora.execute("test/data/yml/option/add_id_conf.yml")
+    KAurora.execute("test/data/yml/option/add_id_conf.yml")
     assert_equal 3, Pref.all.count
     assert_equal true, Pref.where(name: "北海道_0").present?
     assert_equal true, Pref.where(name: "青森県_1").present?
     assert_equal true, Pref.where(name: "岩手県_2").present?
   end
 
-  # outline: whether aurora can register with the foreign key
+  # outline: whether k_aurora can register with the foreign key
   # expected value: registerd 6 datas(pref: 3, member: 3)
   test "foreign_key" do
-    Aurora.execute("test/data/yml/function/foreign_key_insert.yml")
+    KAurora.execute("test/data/yml/function/foreign_key_insert.yml")
     assert_equal 3, Pref.all.count
     assert_equal 3, Member.all.count
     assert_equal Pref.all.pluck(:id), Member.all.pluck(:pref_id)
   end
 
-  # outline: whether aurora can register with the expression_expansion
+  # outline: whether k_aurora can register with the expression_expansion
   # expected value: registerd 3 datas
   #                 created_at: DateTime.parse("1997/02/05")
   test "expression_expansion" do
-    Aurora.execute("test/data/yml/function/expression_expansion.yml")
+    KAurora.execute("test/data/yml/function/expression_expansion.yml")
     assert_equal 3, Pref.all.count
     assert_equal true, Pref.where(name: "北海道").present?
     assert_equal true, Pref.where(name: "青森県").present?
@@ -107,14 +107,14 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # outline: whether 'default seeder function' works
   # expected value: registerd 3 datas
   test "default seeder" do
-    Aurora.execute("test/data/yml/function/default_seeder.yml")
+    KAurora.execute("test/data/yml/function/default_seeder.yml")
     assert_equal 3, TestModel.all.count
   end
 
   # outline: whether 'maked function' works
   # expected value: registerd 3 datas
   test "maked" do
-    Aurora.execute("test/data/yml/function/maked/once.yml")
+    KAurora.execute("test/data/yml/function/maked/once.yml")
     assert_equal 2, Member.all.count
     assert_equal true, Member.where(name: "北海道").present?
     assert_equal true, Member.where(name: "青森県").present?
@@ -123,7 +123,7 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # outline: whether 'maked function' works when written twice in a row
   # expected value: registerd 4 datas
   test "maked(twice)" do
-    Aurora.execute("test/data/yml/function/maked/twice.yml")
+    KAurora.execute("test/data/yml/function/maked/twice.yml")
     assert_equal 4, Member.all.count
     assert_equal true, Member.where(name: "北海道").present?
     assert_equal true, Member.where(name: "青森県").present?
@@ -134,8 +134,8 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # outline: whether 'maked function' works when written in same model
   # expected value: registerd 3 datas
   test "maked(same model)" do
-    Aurora.import("./test/data/methods.rb")
-    Aurora.execute("test/data/yml/function/maked/same_model.yml")
+    KAurora.import("./test/data/methods.rb")
+    KAurora.execute("test/data/yml/function/maked/same_model.yml")
     assert_equal 3, Member.all.count
 
     tarou = Member.find_by(name: "Tarou")
@@ -154,14 +154,14 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # outline: whether 'expression_expansion' of loop works
   # expected value: registerd 3 datas
   test "expression_expansion of loop" do
-    Aurora.execute("test/data/yml/function/loop_expression_expansion.yml")
+    KAurora.execute("test/data/yml/function/loop_expression_expansion.yml")
     assert_equal 3, Member.all.count
   end
 
   # outline: whether 'escape function' of loop works
   # expected value: registerd escaped str data
   test "escape" do
-    Aurora.execute("test/data/yml/function/escape.yml")
+    KAurora.execute("test/data/yml/function/escape.yml")
     assert_equal 3, Pref.all.count
     assert_equal 3, Pref.where(name: "<['北海道', '青森県', '岩手県']>").count
     assert_equal 3, Member.where(name: "F|Pref").count
@@ -170,8 +170,8 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # outline: whether 'import methods function' works
   # expected value: registerd escaped str data
   test "import methods" do
-    Aurora.import("./test/data/methods.rb")
-    Aurora.execute("test/data/yml/function/import_methods.yml")
+    KAurora.import("./test/data/methods.rb")
+    KAurora.execute("test/data/yml/function/import_methods.yml")
     assert_equal true, Pref.where(name: "北海道").present?
     assert_equal true, Pref.where(name: "青森県").present?
     assert_equal true, Pref.where(name: "岩手県").present?
@@ -180,26 +180,26 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # outline: whether 'optimize' works
   # expected value: registerd escaped str data
   test "optimize" do
-    Aurora.execute("test/data/yml/function/optimize.yml")
+    KAurora.execute("test/data/yml/function/optimize.yml")
     assert_equal true, Pref.where(name: "北海道").present?
     assert_equal true, Pref.where(name: "青森県").present?
     assert_equal true, Pref.where(name: "岩手県").present?
   end
 
-  # outline: whether aurora can register after change parameter
+  # outline: whether k_aurora can register after change parameter
   # expected value: registerd 6 datas
   test "after change parameter" do
-    aurora_data = Aurora.get_data("test/data/yml/function/array_insert.yml")
+    aurora_data = KAurora.get_data("test/data/yml/function/array_insert.yml")
     assert_equal 3, aurora_data[0][1][:loop]
     aurora_data[0][1][:loop] = 6
-    Aurora.do_seed(aurora_data)
+    KAurora.do_seed(aurora_data)
     assert_equal 6, Pref.all.count
   end
 
   # outline: whether 'combine_option function' works
   # expected value: registerd 3 datas
   test "combine_option" do
-    Aurora.execute("test/data/yml/function/combine_option.yml")
+    KAurora.execute("test/data/yml/function/combine_option.yml")
     assert_equal 3, Pref.all.count
     assert_equal true, Pref.where(name: "北海道_0").present?
     assert_equal true, Pref.where(name: "北海道_1").present?
@@ -209,7 +209,7 @@ class Aurora::YmlTest < ActiveSupport::TestCase
   # outline: whether 'automatic foreign key' works
   # expected value: registerd 3 datas
   test "automatic foreign_key" do
-    Aurora.execute("test/data/yml/function/automatic_foreign_key.yml")
+    KAurora.execute("test/data/yml/function/automatic_foreign_key.yml")
     assert_equal 3, Pref.all.count
     assert_equal 3, Member.all.count
     assert_equal Pref.all.pluck(:id), Member.all.pluck(:pref_id)
