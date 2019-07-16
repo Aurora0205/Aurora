@@ -51,6 +51,7 @@ If you want to know more information file settings,  please refer to the test
 After write configuration file, execute the following source code in seeds.rb of Ruby on Rails
 
 ```
+require "aurora"
 Aurora.execute(ConfigrationFilePath...)
 ```
 ### Configration file
