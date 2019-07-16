@@ -19,6 +19,8 @@ AuroraからKAuroraに名前を変更して解決しました。ご迷惑をお�
 Resolved by changing the name from Aurora to KAurora. We apologize for the inconvenience.
 
 
+
+
 ## Features
 
 ### Easy to use
@@ -37,6 +39,15 @@ Also, If you enable 'optimize option', 10,000 records can regist in 0.25s on ave
 |updated_at|datetime|NO|
 
 ## Getting started
+
+現在、パッチを当てたバージョンがリリース出来ていないので下記のようにGemfileに記述しインストールしてください
+
+Currently, the patched version can not be released, so please write it to Gemfile as below and install it
+```ruby
+gem 'k_aurora', git: "https://github.com/Aurora0205/Aurora"
+```
+
+
 Add this line to your application's Gemfile:
 
 ```ruby
