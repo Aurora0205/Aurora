@@ -6,6 +6,16 @@
 Aurora is fast seeder of 'Ruby on Rails' that uses .yml  
 Currently only mysql supported
 
+## NOTICE
+
+現在既存にあるGemと名前が被ったせいでrequireしないと使えいない状況にあります
+申し訳ありませんが、対応をお待ちください
+
+
+It is in a situation where it can not be used unless it is required due to the fact that the existing Gem and the name have been acquired.
+Sorry, please wait for the response
+
+
 ## Features
 
 ### Easy to use
