@@ -1,3 +1,3 @@
-module Aurora
+module KAurora
   VERSION = '0.1.2'
 end

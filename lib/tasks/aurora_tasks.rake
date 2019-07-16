@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :aurora do
+# task :k_aurora do
 #   # Task goes here
 # end
